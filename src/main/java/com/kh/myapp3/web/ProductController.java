@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
   private final ProductSVC productSVC;
 
   //등록양식
-  @GetMapping
+  @GetMapping("/add")
   public String saveForm(){
 
-    return "product/saveForm"; //상품등록 view
+    return "product/addForm"; //상품등록 view
   }
 
   //등록처리
-  @PostMapping
+  @PostMapping("/add")
   public String save(SaveForm saveForm){
     log.info("saveForm:{}",saveForm);
 
@@ -35,7 +35,7 @@ public class ProductController {
 
     Integer productId = productSVC.save(product);
 
-    return "redirect:/product/"+productId;  //상품상세 view
+    return "redirect:/products/"+productId;  //상품상세 view
   }
 
   //상품개별조회
@@ -43,14 +43,14 @@ public class ProductController {
   public String findByProductId(@PathVariable("pid") String pid){
     //db에서 상품조회
 
-    return "product/detailForm"; //상품 상세 view
+    return "product/itemForm"; //상품 상세 view
   }
 
   //수정양식
   @GetMapping("/{pid}/edit")
   public String updateForm(){
 
-    return "product/updateForm";  //상품 수정 view
+    return "product/editForm";  //상품 수정 view
   }
 
 
@@ -58,18 +58,18 @@ public class ProductController {
   @PostMapping("/{pid}/edit")
   public String update(){
 
-    return "redirect:/product/1"; //상품 상세 view
+    return "redirect:/products/1"; //상품 상세 view
   }
 
   //삭제처리
   @GetMapping("/{pid}/del")
   public String delete(){
 
-    return "redirect:/product/all"; // 전체 목록 view
+    return "redirect:/products"; // 전체 목록 view
   }
 
   //목록화면
-  @GetMapping("/all")
+  @GetMapping
   public String list(){
 
     return "product/all"; //전체목록 view
