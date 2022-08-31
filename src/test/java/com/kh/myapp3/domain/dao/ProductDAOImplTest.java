@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @Slf4j
 @SpringBootTest
 public class ProductDAOImplTest {
@@ -62,4 +64,27 @@ public class ProductDAOImplTest {
     Assertions.assertThat(findedProduct).isEqualTo(product);
   }
 
+  @Test
+  @DisplayName("삭제")
+  void delete(){
+    Long productId = 62L;
+    productDAO.delete(productId);
+    Product findedProduct = productDAO.findById(productId);
+    Assertions.assertThat(findedProduct).isNull();
+  }
+
+  @Test
+  @DisplayName("목록")
+  void all(){
+    List<Product> list = productDAO.findAll();
+    //log.info("전체목록={}",list);
+    //람다식
+    //list.stream().forEach(ele->log.info("상품:{}",ele));
+    //향상된for문
+    for(Product p : list){
+      log.info("상품:{}",p);
+    }
+
+    Assertions.assertThat(list.size()).isEqualTo(5);
+  }
 }
