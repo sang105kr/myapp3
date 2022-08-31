@@ -6,7 +6,11 @@ import com.kh.myapp3.web.form.SaveForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
@@ -33,15 +37,22 @@ public class ProductController {
     product.setQuantity(saveForm.getQuantity());
     product.setPrice(saveForm.getPrice());
 
-    Integer productId = productSVC.save(product);
+    Product savedProduct = productSVC.save(product);
 
-    return "redirect:/products/"+productId;  //상품상세 view
+    return "redirect:/products/"+savedProduct.getProductId();  //상품상세 view
   }
 
   //상품개별조회
   @GetMapping("/{pid}")
-  public String findByProductId(@PathVariable("pid") String pid){
+  public String findByProductId(
+      @PathVariable("pid") String pid,
+      Model model
+  ){
     //db에서 상품조회
+
+
+    Product product = new Product();
+    model.addAttribute("product",product);
 
     return "product/itemForm"; //상품 상세 view
   }
