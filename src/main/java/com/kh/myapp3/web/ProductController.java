@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/products")
@@ -40,7 +42,7 @@ public class ProductController {
 
     Product savedProduct = productSVC.save(product);
 
-    return "redirect:/products/"+savedProduct.getProductId();  //상품상세 view
+    return "redirect:/products/"+savedProduct.getProductId();  //상품상세 요청 url
   }
 
   //상품개별조회
@@ -82,15 +84,18 @@ public class ProductController {
 
   //삭제처리
   @GetMapping("/{pid}/del")
-  public String delete(){
+  public String delete(@PathVariable("pid") Long pid){
 
+    productSVC.delete(pid);
     return "redirect:/products"; // 전체 목록 view
   }
 
   //목록화면
   @GetMapping
-  public String list(){
+  public String list(Model model){
 
+    List<Product> list = productSVC.findAll();
+    model.addAttribute("list",list);
     return "product/all"; //전체목록 view
   }
 }

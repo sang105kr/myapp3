@@ -1,6 +1,6 @@
 drop user c##product;
 --계정생성
-CREATE USER c##product IDENTIFIED BY product1234
+CREATE USER c##springboot IDENTIFIED BY springboot1234
     DEFAULT TABLESPACE users
     TEMPORARY TABLESPACE temp
     PROFILE DEFAULT;
