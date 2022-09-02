@@ -29,19 +29,24 @@ insert into member (member_id,email,pw,nickname)
  values(member_member_id_seq.nextval, 'test3@test.com','1234','별칭3');
 
 --조회
-select member_id,email,pw,nickname,cdate,udate from member
- where email = 'test1@test.com';
+select member_id,email,pw,nickname,cdate,udate
+  from member
+ where member_id = '2';
 
 --수정
 update member
    set pw = 5678,
-       nickname = '별칭4'
- where email = 'test1@test.com';
+       nickname = '별칭4',
+       udate = systimestamp
+ where member_id = '2';
 
 commit;
  --삭제
 delete from member
- where email = 'test1@test.com';
+ where member_id = '2';
 
+--회원번호생성
+select member_member_id_seq.nextval from dual;
+select member_member_id_seq.currval from dual;
 rollback;
 select * from member;
