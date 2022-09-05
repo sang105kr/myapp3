@@ -35,10 +35,10 @@ select member_id,email,pw,nickname,cdate,udate
 
 --수정
 update member
-   set pw = 5678,
-       nickname = '별칭4',
+   set nickname = '별칭4',
        udate = systimestamp
- where member_id = '2';
+ where member_id = '2'
+   and pw = 5678,;
 
 commit;
  --삭제
