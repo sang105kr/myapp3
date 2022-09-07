@@ -1,18 +1,19 @@
-package com.kh.myapp3.domain.dao;
+package com.kh.myapp3.domain.admin;
 
 import com.kh.myapp3.domain.Member;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Slf4j
 @Repository
-@RequiredArgsConstructor
-public class MemberDAOImpl implements MemberDAO{
-
+@AllArgsConstructor
+public class AdminMemberDAOImpl implements AdminMemberDAO{
   private final JdbcTemplate jt;
 
   /**
@@ -102,4 +103,18 @@ public class MemberDAOImpl implements MemberDAO{
     return result;
   }
 
+  /**
+   * 목록
+   *
+   * @return 회원전체
+   */
+  @Override
+  public List<Member> all() {
+
+    StringBuffer sql = new StringBuffer();
+    sql.append("select member_id,email,pw,nickname,cdate,udate ");
+    sql.append("  from member ");
+
+    return jt.query(sql.toString(), new BeanPropertyRowMapper<>(Member.class));
+  }
 }
