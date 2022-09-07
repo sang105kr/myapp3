@@ -44,7 +44,15 @@
       </tr>
     </tbody>
   </table>
+  <div><button type="button" id="addBtn">등록</button></div>
   <script>
+    //등록
+    addBtn.addEventListener('click',e=>{
+      console.log('등록');
+      location.href = `/admin/members/add`;
+    })
+
+    //행클릭시 상세조회
     const $tbody = document.querySelector("table tbody");
     $tbody.addEventListener('click',e=>{
       if(e.target.tagName == 'TD'){
