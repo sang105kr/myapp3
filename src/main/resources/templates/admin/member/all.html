@@ -34,14 +34,24 @@
       </tr>
     </thead>
     <tbody>
-      <tr th:each="rec :${list}">
+      <tr th:each="rec :${list}"  th:data-member-id="${rec.memberId}">
         <td>[[${recStat.count}]]</td>
-        <td>[[${rec.memberId}]]</td>
+<!--        <td><a th:href="@{|/admin/members/${rec.memberId}|}">[[${rec.memberId}]]</a></td>-->
+        <td><!--a th:href="@{/admin/members/{id}(id=${rec.memberId})}"-->[[${rec.memberId}]]<!--/a--></td>
         <td>[[${rec.email}]]</td>
-        <td>[[${rec.cdate}]]</td>
-        <td>[[${rec.udate}]]</td>
+        <td>[[${#temporals.format(rec.cdate,'yy-MM-dd HH:mm')}]]</td>
+        <td>[[${#temporals.format(rec.udate,'yy-MM-dd HH:mm')}]]</td>
       </tr>
     </tbody>
   </table>
+  <script>
+    const $tbody = document.querySelector("table tbody");
+    $tbody.addEventListener('click',e=>{
+      if(e.target.tagName == 'TD'){
+        const memberId = e.target.parentElement.dataset.memberId;
+        location.href =  `/admin/members/${memberId}`;
+      }
+    });
+  </script>
 </body>
 </html>
