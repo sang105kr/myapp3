@@ -54,6 +54,12 @@ public class AdminMemberController {
       bindingResult.rejectValue("email","emailChk2",new String[]{"0","5"},"이메일 길이가 초과!");
       return "admin/member/addForm_old";
     }
+    //2) objectError 2개이상의 필드 분석을 통해 오류검증
+    //   비밀번호,별칭의 자리수가 모두가 5미만인경우
+    if(addForm.getPw().trim().length() < 5 && addForm.getNickname().trim().length() < 5){
+      bindingResult.reject("memberChk",new String[]{"5"},"비밀번호,별칭의 자리수가 모두 5 미만입니다.");
+      return "admin/member/addForm_old";
+    }
 
 
 
