@@ -26,12 +26,34 @@ public class AdminMemberController {
   //등록화면
   @GetMapping("/add")
   public String addForm(Model model){
-    model.addAttribute("addForm", new AddForm());
-    return "admin/member/addForm_old";  //가입 화면
+    model.addAttribute("form", new AddForm());
+    return "admin/member/addForm";  //가입 화면
   }
   //등록처리	POST	/members/add
   @PostMapping("/add")
-  public String add(@Valid @ModelAttribute AddForm addForm, BindingResult bindingResult){
+  public String add(@Valid @ModelAttribute("form") AddForm addForm, BindingResult bindingResult){
+
+    log.info("addForm={}",addForm);
+
+    //검증
+    if(bindingResult.hasErrors()){
+      log.info("errors={}",bindingResult);
+      return "admin/member/addForm";
+    }
+    //회원아이디 중복체크
+
+    //회원등록
+    Member member = new Member();
+    member.setEmail(addForm.getEmail());
+    member.setPw(addForm.getPw());
+    member.setNickname(addForm.getNickname());
+    Member insertedMember = adminMemberSVC.insert(member);
+
+    Long id = insertedMember.getMemberId();
+    return "redirect:/admin/members/{id}"; //회원 상세
+  }
+
+  public String add2(@Valid @ModelAttribute AddForm addForm, BindingResult bindingResult){
     //검증
     //model.addAttribute("addForm", addForm);
     log.info("addForm={}",addForm);

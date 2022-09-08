@@ -46,4 +46,10 @@ public interface AdminMemberDAO {
    */
   List<Member> all();
 
+  /**
+   * 이메일 중복체크
+   * @param email 이메일
+   * @return 존재하면 true
+   */
+  Boolean dupChkOfMemberEmail(String email);
 }
