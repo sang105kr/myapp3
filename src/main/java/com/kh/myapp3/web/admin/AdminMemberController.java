@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,7 +32,11 @@ public class AdminMemberController {
   }
   //등록처리	POST	/members/add
   @PostMapping("/add")
-  public String add(@Valid @ModelAttribute("form") AddForm addForm, BindingResult bindingResult){
+  public String add(
+      @Valid @ModelAttribute("form") AddForm addForm,
+      BindingResult bindingResult,
+      RedirectAttributes redirectAttributes // 리다이렉트할때 정보를 유지하기위해사용
+  ){
 
     log.info("addForm={}",addForm);
 
@@ -41,7 +46,11 @@ public class AdminMemberController {
       return "admin/member/addForm";
     }
     //회원아이디 중복체크
-
+    Boolean isExist = adminMemberSVC.dupChkOfMemberEmail(addForm.getEmail());
+    if(isExist){
+      bindingResult.rejectValue("email","dup.email", "동일한 이메일이 존재합니다.");
+      return "admin/member/addForm";
+    }
     //회원등록
     Member member = new Member();
     member.setEmail(addForm.getEmail());
@@ -50,6 +59,8 @@ public class AdminMemberController {
     Member insertedMember = adminMemberSVC.insert(member);
 
     Long id = insertedMember.getMemberId();
+    redirectAttributes.addAttribute("id",id);
+
     return "redirect:/admin/members/{id}"; //회원 상세
   }
 
@@ -109,7 +120,7 @@ public class AdminMemberController {
     memberForm.setCdate(findedMember.getCdate());
     memberForm.setUdate(findedMember.getUdate());
 
-    model.addAttribute("memberForm",memberForm);
+    model.addAttribute("form",memberForm);
 
     return "admin/member/memberForm"; //회원 상세화면
   }
@@ -125,12 +136,21 @@ public class AdminMemberController {
     editForm.setPw(findedMember.getPw());
     editForm.setNickname(findedMember.getNickname());
 
-    model.addAttribute("editForm", editForm);
+    model.addAttribute("form", editForm);
     return "admin/member/editForm"; //회원 수정화면
   }
   //수정처리	POST	/members/{id}/edit
   @PostMapping("/{id}/edit")
-  public String edit(@PathVariable("id") Long id, EditForm editForm){
+  public String edit(
+      @PathVariable("id") Long id,
+      @Valid @ModelAttribute("form") EditForm editForm,
+      BindingResult bindingResult){
+
+    //검증
+    if(bindingResult.hasErrors()){
+      log.info("errors={}",bindingResult);
+      return "admin/member/editForm";
+    }
 
     Member member = new Member();
     member.setPw(editForm.getPw());
