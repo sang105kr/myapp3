@@ -1,4 +1,4 @@
-package com.kh.myapp3.domain.admin;
+package com.kh.myapp3.domain.dao.admin;
 
 import com.kh.myapp3.domain.Member;
 import lombok.RequiredArgsConstructor;

@@ -1,12 +1,13 @@
 package com.kh.myapp3.web.admin;
 
 import com.kh.myapp3.domain.Member;
-import com.kh.myapp3.domain.admin.AdminMemberSVC;
+import com.kh.myapp3.domain.dao.admin.AdminMemberSVC;
 import com.kh.myapp3.web.admin.form.member.AddForm;
 import com.kh.myapp3.web.admin.form.member.EditForm;
 import com.kh.myapp3.web.admin.form.member.MemberForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -37,7 +39,7 @@ public class AdminMemberController {
       BindingResult bindingResult,
       RedirectAttributes redirectAttributes // 리다이렉트할때 정보를 유지하기위해사용
   ){
-
+    //model.addAttribute("addForm",addForm);
     log.info("addForm={}",addForm);
 
     //검증
@@ -176,7 +178,21 @@ public class AdminMemberController {
   @GetMapping("/all")
   public String all(Model model){
 
-    List<Member> list = adminMemberSVC.all();
+    List<Member> members = adminMemberSVC.all();
+    List<MemberForm> list = new ArrayList<>();
+//  case1)  향상된 for문
+//    for (Member member : members) {
+//      MemberForm memberForm = new MemberForm();
+//      BeanUtils.copyProperties(member,memberForm);
+//      list.add(memberForm);
+//    }
+    //case2) 고차함수적용=>람다표현식
+    members.stream().forEach(member->{
+      MemberForm memberForm = new MemberForm();
+      BeanUtils.copyProperties(member,memberForm);
+      list.add(memberForm);
+    });
+
     model.addAttribute("list", list);
     return "admin/member/all";
   }
