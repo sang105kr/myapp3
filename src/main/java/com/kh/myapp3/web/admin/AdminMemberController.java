@@ -96,8 +96,6 @@ public class AdminMemberController {
       return "admin/member/addForm_old";
     }
 
-
-
     //회원등록
     Member member = new Member();
     member.setEmail(addForm.getEmail());

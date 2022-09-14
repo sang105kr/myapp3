@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 public class AddForm {
-  @NotBlank
+  @NotBlank // NotBlank ,NotBlank.필드명, NotBlank.타임명, NotBlank.폼객체명.필드명
   @Email(regexp = ".+@.+\\..+")
   private String email;       //이메일
   @NotBlank
