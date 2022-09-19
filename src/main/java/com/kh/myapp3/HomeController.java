@@ -1,6 +1,10 @@
 package com.kh.myapp3;
 
+import com.kh.myapp3.domain.dao.Member;
+import com.kh.myapp3.domain.svc.MemberSVC;
 import com.kh.myapp3.web.form.LoginForm;
+import com.kh.myapp3.web.session.LoginMember;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -9,12 +13,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/")
 public class HomeController {
+
+  final MemberSVC memberSVC;
 
   @GetMapping
   public String home() {
@@ -33,7 +43,8 @@ public class HomeController {
   //로그인 처리
   @PostMapping("/login")
   public String login(@Valid @ModelAttribute("form") LoginForm loginForm,
-                      BindingResult bindingResult){
+                      BindingResult bindingResult,
+                      HttpServletRequest request){
     //기본 검증
     if (bindingResult.hasErrors()) {
       log.info("bindingResult={}",bindingResult);
@@ -41,11 +52,19 @@ public class HomeController {
     }
 
     //회원유무
-
+    Optional<Member> member = memberSVC.login(loginForm.getEmail(), loginForm.getPw());
+    if(member.isEmpty()){
+      bindingResult.reject("LoginForm.login","회원정보가 없습니다.");
+      return "login";
+    }
 
     //회원인경우
-    //세션에 회원정보 저장
+    Member findedMember = member.get();
 
+    //세션에 회원정보 저장
+    LoginMember loginMember = new LoginMember(findedMember.getEmail(), findedMember.getNickname());
+    HttpSession session = request.getSession(true);
+    session.setAttribute("LoginMember", loginMember);
 
     return "afterLogin";
   }
