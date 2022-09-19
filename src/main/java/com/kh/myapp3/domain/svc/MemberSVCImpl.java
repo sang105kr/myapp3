@@ -1,6 +1,6 @@
 package com.kh.myapp3.domain.svc;
 
-import com.kh.myapp3.domain.Member;
+import com.kh.myapp3.domain.dao.Member;
 import com.kh.myapp3.domain.dao.MemberDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

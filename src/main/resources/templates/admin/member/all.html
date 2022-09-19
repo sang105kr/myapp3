@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko"
-      th:replace="~{layout/base::layout(~{::title}, ~{::div#container}, ~{::link}, ~{::script}, ~{::style})}"
+      th:replace="~{layout/base::layout(
+      ~{::title},
+      ~{::div#container},
+      ~{::link},
+      ~{::script},
+      ~{},
+      _
+      )}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
